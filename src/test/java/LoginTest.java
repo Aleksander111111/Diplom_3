@@ -8,7 +8,6 @@ import pages.MainPage;
 import pages.RegistrationPage;
 import utils.TestData;
 import utils.UserAPI;
-import com.google.gson.JsonObject;
 import static org.junit.Assert.assertTrue;
 
 @DisplayName("Тесты входа в систему")
@@ -23,7 +22,7 @@ public class LoginTest {
 
     @Before
     public void setUp() throws Exception {
-        driver = DriverFactory.createDriver("yandex");
+        driver = DriverFactory.createDriver();
         mainPage = new MainPage(driver);
         loginPage = new LoginPage(driver);
         registrationPage = new RegistrationPage(driver);
@@ -35,29 +34,29 @@ public class LoginTest {
 
     @Test
     @DisplayName("Вход по кнопке 'Войти в аккаунт' на главной")
-    public void testLoginFromMainPage() throws Exception {
+    public void testLoginFromMainPage() {
         mainPage.open();
         mainPage.clickLoginButton();
 
         loginPage.login(userEmail, TestData.VALID_PASSWORD);
 
-        checkLoginThroughAPI();
+        assertTrue("Пользователь должен быть авторизован", mainPage.isUserLoggedIn());
     }
 
     @Test
     @DisplayName("Вход через кнопку 'Личный кабинет'")
-    public void testLoginFromPersonalAccount() throws Exception {
+    public void testLoginFromPersonalAccount() {
         mainPage.open();
         mainPage.clickPersonalAccountButton();
 
         loginPage.login(userEmail, TestData.VALID_PASSWORD);
 
-        checkLoginThroughAPI();
+        assertTrue("Пользователь должен быть авторизован", mainPage.isUserLoggedIn());
     }
 
     @Test
     @DisplayName("Вход через кнопку в форме регистрации")
-    public void testLoginFromRegistrationForm() throws Exception {
+    public void testLoginFromRegistrationForm() {
         mainPage.open();
         mainPage.clickLoginButton();
         loginPage.clickRegisterLink();
@@ -65,37 +64,20 @@ public class LoginTest {
 
         loginPage.login(userEmail, TestData.VALID_PASSWORD);
 
-        checkLoginThroughAPI();
+        assertTrue("Пользователь должен быть авторизован", mainPage.isUserLoggedIn());
     }
 
     @Test
     @DisplayName("Вход через кнопку в форме восстановления пароля")
-    public void testLoginFromForgotPasswordForm() throws Exception {
+    public void testLoginFromForgotPasswordForm() {
         mainPage.open();
         mainPage.clickLoginButton();
         loginPage.clickForgotPasswordLink();
-
         loginPage.clickLoginLink();
 
         loginPage.login(userEmail, TestData.VALID_PASSWORD);
 
-        checkLoginThroughAPI();
-    }
-
-    private void checkLoginThroughAPI() throws Exception {
-        String loginToken = UserAPI.loginUser(userEmail, TestData.VALID_PASSWORD);
-        assertTrue("Должен быть получен токен при логине через API", loginToken != null);
-
-        JsonObject userInfo = UserAPI.getUserInfo(loginToken);
-        assertTrue("Запрос данных пользователя должен быть успешным",
-                userInfo.get("success").getAsBoolean());
-
-        JsonObject user = userInfo.getAsJsonObject("user");
-        String actualEmail = user.get("email").getAsString();
-        String actualName = user.get("name").getAsString();
-
-        assertTrue("Email пользователя должен совпадать", userEmail.equals(actualEmail));
-        assertTrue("Имя пользователя должно совпадать", userName.equals(actualName));
+        assertTrue("Пользователь должен быть авторизован", mainPage.isUserLoggedIn());
     }
 
     @After

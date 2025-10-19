@@ -13,7 +13,7 @@ public class ConstructorTest {
 
     @Before
     public void setUp() {
-        driver = DriverFactory.createDriver("yandex");
+        driver = DriverFactory.createDriver();
         mainPage = new MainPage(driver);
     }
 
@@ -21,33 +21,27 @@ public class ConstructorTest {
     @DisplayName("Переход к разделу 'Булки'")
     public void testNavigateToBunsSection() {
         mainPage.open();
-
         mainPage.clickBunsSection();
-
         boolean isBunsActive = mainPage.waitForBunsSectionActive();
-        assertTrue("Раздел 'Булки' должен быть активным (иметь класс tab_tab_type_current__2BEPc)", isBunsActive);
+        assertTrue("Раздел 'Булки' должен быть активным", isBunsActive);
     }
 
     @Test
     @DisplayName("Переход к разделу 'Соусы'")
     public void testNavigateToSaucesSection() {
         mainPage.open();
-
         mainPage.clickSaucesSection();
-
         boolean isSaucesActive = mainPage.waitForSaucesSectionActive();
-        assertTrue("Раздел 'Соусы' должен быть активным (иметь класс tab_tab_type_current__2BEPc)", isSaucesActive);
+        assertTrue("Раздел 'Соусы' должен быть активным", isSaucesActive);
     }
 
     @Test
     @DisplayName("Переход к разделу 'Начинки'")
     public void testNavigateToFillingsSection() {
         mainPage.open();
-
         mainPage.clickFillingsSection();
-
         boolean isFillingsActive = mainPage.waitForFillingsSectionActive();
-        assertTrue("Раздел 'Начинки' должен быть активным (иметь класс tab_tab_type_current__2BEPc)", isFillingsActive);
+        assertTrue("Раздел 'Начинки' должен быть активным", isFillingsActive);
     }
 
     @After

@@ -17,6 +17,7 @@ public class MainPage extends BasePage {
     private By activeBunsSection = By.xpath("//span[text()='Булки']/parent::div[contains(@class, 'tab_tab_type_current__2BEPc')]");
     private By activeSaucesSection = By.xpath("//span[text()='Соусы']/parent::div[contains(@class, 'tab_tab_type_current__2BEPc')]");
     private By activeFillingsSection = By.xpath("//span[text()='Начинки']/parent::div[contains(@class, 'tab_tab_type_current__2BEPc')]");
+    private By placeOrderButton = By.xpath("//button[text()='Оформить заказ']");
 
     public MainPage(WebDriver driver) {
         super(driver);
@@ -69,6 +70,15 @@ public class MainPage extends BasePage {
     @Step("Проверить активацию раздела 'Начинки'")
     public boolean waitForFillingsSectionActive() {
         return waitForSectionActive(activeFillingsSection, "Начинки");
+    }
+
+    @Step("Проверить, что пользователь авторизован (отображается кнопка 'Оформить заказ')")
+    public boolean isUserLoggedIn() {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(placeOrderButton)).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean waitForSectionActive(By activeSectionLocator, String sectionName) {

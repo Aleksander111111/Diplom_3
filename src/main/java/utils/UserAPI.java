@@ -1,5 +1,6 @@
 package utils;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.qameta.allure.Step;
@@ -12,20 +13,31 @@ import java.net.http.HttpResponse;
 public class UserAPI {
     private static final String BASE_URL = "https://stellarburgers.education-services.ru/api";
     private static final HttpClient httpClient = HttpClient.newHttpClient();
+    private static final Gson gson = new Gson();
+
+    public static class UserCredentials {
+        public String email;
+        public String password;
+        public String name;
+
+        public UserCredentials(String email, String password, String name) {
+            this.email = email;
+            this.password = password;
+            this.name = name;
+        }
+    }
 
     @Step("Регистрация пользователя через API: {email}")
     public static String registerUser(String email, String password, String name) throws IOException, InterruptedException {
         String url = BASE_URL + "/auth/register";
 
-        JsonObject user = new JsonObject();
-        user.addProperty("email", email);
-        user.addProperty("password", password);
-        user.addProperty("name", name);
+        UserCredentials user = new UserCredentials(email, password, name);
+        String requestBody = gson.toJson(user);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(user.toString()))
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -70,14 +82,13 @@ public class UserAPI {
     public static String loginUser(String email, String password) throws IOException, InterruptedException {
         String url = BASE_URL + "/auth/login";
 
-        JsonObject credentials = new JsonObject();
-        credentials.addProperty("email", email);
-        credentials.addProperty("password", password);
+        UserCredentials credentials = new UserCredentials(email, password, null);
+        String requestBody = gson.toJson(credentials);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(credentials.toString()))
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

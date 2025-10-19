@@ -3,7 +3,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class DriverFactory {
-    public static WebDriver createDriver(String browser) {
+    public static WebDriver createDriver() {
+        String browser = Config.getBrowser();
         WebDriver driver;
 
         switch (browser.toLowerCase()) {
@@ -21,11 +22,12 @@ public class DriverFactory {
     }
 
     private static WebDriver createChromeDriver() {
+        System.setProperty("webdriver.chrome.driver", "C:\\tools\\chromedriver.exe");
         return new ChromeDriver();
     }
 
     private static WebDriver createYandexDriver() {
-        System.setProperty("webdriver.chrome.driver", "C:\\tools\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\tools\\138\\chromedriver.exe");
 
         ChromeOptions yandexOptions = new ChromeOptions();
         yandexOptions.setBinary("C:\\Users\\User\\AppData\\Local\\Yandex\\YandexBrowser\\Application\\browser.exe");

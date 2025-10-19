@@ -2,8 +2,6 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import io.qameta.allure.Step;
 
 public class RegistrationPage extends BasePage {
@@ -21,26 +19,17 @@ public class RegistrationPage extends BasePage {
 
     @Step("Ввести имя: {name}")
     public void inputName(String name) {
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(nameInput));
-        element.click();
-        element.clear();
-        element.sendKeys(name);
+        inputText(nameInput, name);
     }
 
     @Step("Ввести email: {email}")
     public void inputEmail(String email) {
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(emailInput));
-        element.click();
-        element.clear();
-        element.sendKeys(email);
+        inputText(emailInput, email);
     }
 
     @Step("Ввести пароль")
     public void inputPassword(String password) {
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(passwordInput));
-        element.click();
-        element.clear();
-        element.sendKeys(password);
+        inputText(passwordInput, password);
     }
 
     @Step("Нажать кнопку 'Зарегистрироваться'")
