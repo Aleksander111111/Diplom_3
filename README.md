@@ -14,4 +14,5 @@
 «Соусы»;
 «Начинки».
 Сделан отчет Allure
-Тесты по умолчанию запускаются в Яндекс Браузере для запуска тестов в Google Chrome в тестах в сроке driver = DriverFactory.createDriver("yandex"); поменять на "chrome"
+Тесты по умолчанию запускаются в Google Chrome в для запуска в Яндекс Браузере (mvn test -Dbrowser=yandex)
+
