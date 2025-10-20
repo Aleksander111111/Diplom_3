@@ -7,7 +7,7 @@ import pages.MainPage;
 import pages.LoginPage;
 import pages.RegistrationPage;
 import utils.TestData;
-import utils.UserAPI;
+import utils.UserService;
 import static org.junit.Assert.assertTrue;
 
 @DisplayName("Тесты регистрации")
@@ -19,6 +19,7 @@ public class RegistrationTest {
     private String userEmail;
     private String userName;
     private String accessToken;
+    private UserService userService;
 
     @Before
     public void setUp() {
@@ -26,6 +27,7 @@ public class RegistrationTest {
         mainPage = new MainPage(driver);
         loginPage = new LoginPage(driver);
         registrationPage = new RegistrationPage(driver);
+        userService = new UserService();
         userEmail = TestData.generateEmail();
         userName = TestData.generateName();
     }
@@ -43,7 +45,7 @@ public class RegistrationTest {
         registrationPage.register(userName, userEmail, TestData.VALID_PASSWORD);
 
         registrationPage.waitForUrlContains("login");
-        accessToken = UserAPI.loginUser(userEmail, TestData.VALID_PASSWORD);
+        accessToken = userService.loginUser(userEmail, TestData.VALID_PASSWORD);
         assertTrue("Пользователь должен быть успешно зарегистрирован", accessToken != null);
     }
 
@@ -66,7 +68,7 @@ public class RegistrationTest {
     @After
     public void tearDown() throws Exception {
         if (accessToken != null) {
-            UserAPI.deleteUser(accessToken);
+            userService.deleteUser(accessToken);
         }
 
         if (driver != null) {

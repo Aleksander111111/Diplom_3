@@ -7,7 +7,7 @@ import pages.LoginPage;
 import pages.MainPage;
 import pages.RegistrationPage;
 import utils.TestData;
-import utils.UserAPI;
+import utils.UserService;
 import static org.junit.Assert.assertTrue;
 
 @DisplayName("Тесты входа в систему")
@@ -19,6 +19,7 @@ public class LoginTest {
     private String userEmail;
     private String userName;
     private String accessToken;
+    private UserService userService;
 
     @Before
     public void setUp() throws Exception {
@@ -26,10 +27,11 @@ public class LoginTest {
         mainPage = new MainPage(driver);
         loginPage = new LoginPage(driver);
         registrationPage = new RegistrationPage(driver);
+        userService = new UserService();
 
         userEmail = TestData.generateEmail();
         userName = TestData.generateName();
-        accessToken = UserAPI.registerUser(userEmail, TestData.VALID_PASSWORD, userName);
+        accessToken = userService.registerUser(userEmail, TestData.VALID_PASSWORD, userName);
     }
 
     @Test
@@ -83,7 +85,7 @@ public class LoginTest {
     @After
     public void tearDown() throws Exception {
         if (accessToken != null) {
-            UserAPI.deleteUser(accessToken);
+            userService.deleteUser(accessToken);
         }
 
         if (driver != null) {
